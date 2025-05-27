@@ -116,8 +116,8 @@ gunicorn -w 4 -b 127.0.0.1:5000 app:app
 #### Docker (Build image)
 
 ```bash
-    git clone https://github.com/UCD-CCI/MISP-Forms.git 
-    cd MISP-Forms
+git clone https://github.com/UCD-CCI/MISP-Forms.git 
+cd MISP-Forms
 ```
 Create your misp_keys.json and .env files
 ```bash
