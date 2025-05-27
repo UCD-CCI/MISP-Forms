@@ -103,7 +103,7 @@ git clone https://github.com/UCD-CCI/MISP-Forms.git
 cd MISP-Forms
 ```
 
-Create your misp_keys.json and .env files
+Create your misp_keys.json and .env files (see section above: Create Config Files)
 
 ```bash
 python3 -m venv venv
@@ -134,14 +134,16 @@ python3 app.py
 git clone https://github.com/UCD-CCI/MISP-Forms.git 
 cd MISP-Forms
 ```
-Create your misp_keys.json and .env files
+
+Create your misp_keys.json and .env files (see section above: Create Config Files)
 ```bash
 docker compose up -d
 ```
 ---
 #### Docker (pull Image from Docker Hub)
 
-Create your misp_keys.json and .env files
+
+Create your misp_keys.json and .env files (see section above: Create Config Files)
 
 ```bash
 docker run -d --env-file .env -v $(pwd)/misp_keys.json:/app/misp_keys.json -p 5000:5000 cciucd/misp-forms:latest
