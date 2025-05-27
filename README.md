@@ -129,7 +129,7 @@ docker compose up -d
 Create your misp_keys.json and .env files
 
 ```bash
-docker run -d --env-file .env -v $(pwd)/misp_keys.json:/app/misp_keys.json -p 5000:5000 misp-forms:latest
+docker run -d --env-file .env -v $(pwd)/misp_keys.json:/app/misp_keys.json -p 5000:5000 cciucd/misp-forms:latest
 ```
 ---
 
