@@ -99,12 +99,19 @@ In this file add the user's MISP Organisation name and the API key in this file.
 #### From Source
 
 ```bash
-git clone 
+git clone https://github.com/UCD-CCI/MISP-Forms.git 
 cd misp-forms
 python -m venv venv
 pip install -r requirements
 cp templates.env .env 
+```
+
 Update .env with your values, e.g.  MISP url, etc.
+
+run MISP-forms
+
+```bash
+
 gunicorn -w 4 -b 127.0.0.1:5000 app:app
 
 ```
@@ -113,7 +120,7 @@ gunicorn -w 4 -b 127.0.0.1:5000 app:app
 
 ```bash
 git clone 
-cd misp-forms
+cd MISP-Forms
 cp templates.env .env
 Update misp-keys.json (add orgnation name and misp api key)
 Update .env with your values, e.g.  MISP url, etc.
