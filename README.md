@@ -100,38 +100,35 @@ In this file add the user's MISP Organisation name and the API key in this file.
 
 ```bash
 git clone https://github.com/UCD-CCI/MISP-Forms.git 
-cd misp-forms
-python -m venv venv
-pip install -r requirements
-cp templates.env .env 
+cd MISP-Forms
 ```
 
-Update .env with your values, e.g.  MISP url, etc.
-
-run MISP-forms
+Create your misp_keys.json and .env to MISP-Forms Directory
 
 ```bash
-
+python -m venv venv
+pip install -r requirements.txt
 gunicorn -w 4 -b 127.0.0.1:5000 app:app
-
 ```
+---
 
 #### Docker (Build image)
 
 ```bash
-git clone 
-cd MISP-Forms
-cp templates.env .env
-Update misp-keys.json (add orgnation name and misp api key)
-Update .env with your values, e.g.  MISP url, etc.
-docker compose up -d
+    git clone https://github.com/UCD-CCI/MISP-Forms.git 
+    cd MISP-Forms
 ```
-
-#### Docker (pull Image from Docker Hub)
+Create your misp_keys.json and .env to MISP-Forms Directory
 
 ```bash
-Create .env
-Create misp-keys.json
+docker compose up -d
+```
+---
+#### Docker (pull Image from Docker Hub)
+
+Create your misp_keys.json and .env to MISP-Forms Directory
+
+```bash
 docker run -d --env-file .env -v $(pwd)/misp_keys.json:/app/misp_keys.json -p 5000:5000 misp-forms:latest
 ```
 ---
