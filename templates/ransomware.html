@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}Report Ransomware Attack{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <h2><i class="fa-brands fa-bitcoin"></i> Report Ransomware Attack</h2>
+    <p class="info-box">
+        Ransomware is a type of malicious software that encrypts files on a computer or network, making them inaccessible to
+        the user. The attacker then demands a ransom—usually in cryptocurrency—in exchange for a decryption key.
+        <br>
+        Ransomware typically spreads through phishing emails, malicious links, or vulnerabilities in software. Once
+        activated, it can lock critical data, disrupt business operations, and even spread across entire networks.
+        Paying the ransom doesn’t guarantee file recovery, as attackers may not provide a working decryption key or
+        could demand additional payments.
+        <br>
+
+    </p>
+
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="flash-message {{ category }}">
+        {{ message|safe }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+    <form method="POST" action="{{ url_for('ransomware.ransomware') }}" enctype="multipart/form-data" onsubmit="showSpinner()">
+
+        <!-- organisation Selection -->
+        <h5>Organisation</h5>
+        <div class="mb-3 p-3 border rounded" style="border: 2px solid #178f8f;">
+            <label for="organisation" class="form-label">Select organisation (Required)</label>
+            <select class="form-control" name="organisation" id="organisation" required>
+                <option value="" disabled selected>Select an organisation</option>
+                {% for org in available_organisations %}
+                <option value="{{ org }}">{{ org }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+
+        <!-- Sharing Options -->
+<h5>Sharing Options</h5>
+
+
+        <div class="mb-3 p-3 border rounded" style="border: 2px solid #178f8f;">
+            {% include 'event_sharing_lite.html' %}
+        </div>
+
+
+        <!-- Incident Details -->
+        <h5>Incident Details {% with href="https://mkdocs.underserved.org" %} {% include 'help.html' %} {% endwith %}</h5>
+        <div class="mb-3 p-3 border rounded" style="border:2px solid #178f8f;">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="date" class="form-label">Date of Attack: (Required)</label>
+                    <input type="date" class="form-control" name="date" id="date" value="{{ today_date }}" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="time" class="form-label">Time of Attack: (Required)</label>
+                    <input type="time" class="form-control" name="time" id="time" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="ransomware_name">Ransomware Name: (Required)</label>
+                <input type="text" class="form-control" name="ransomware_name" id="ransomware_name" placeholder="e.g., Cryptolocker, BitPaymer" required>
+            </div>
+
+            <div class="form-group">
+                <label for="ransom_amount">Ransom Amount Demanded:</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" name="ransom_amount" id="ransom_amount" placeholder="e.g., 1000">
+                    <select class="form-control" name="ransom_amount_currency" id="ransom_amount_currency">
+                        <option value="USD">USD</option>
+                        <option value="EUR">EUR</option>
+                        <option value="BTC">BTC</option>
+                        <option value="ETH">ETH</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="btc_address">Crypto Wallet Address (where attacker wants payment to be made):</label>
+                <input type="text" class="form-control" name="btc_address" id="btc_address" placeholder="e.g., 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa">
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description: (Required)</label>
+                <textarea class="form-control" name="description" id="description" rows="4" placeholder="Provide a description of the incident." required></textarea>
+            </div>
+
+            <h5 class="mt-4">Attacker Information:</h5>
+            <div class="form-group">
+                <label for="person_name">Attacker Name, Handle, Group Name:</label>
+                <input type="text" class="form-control" name="person_name" id="person_name" placeholder="e.g., REvil, Conti, DarkSide">
+            </div>
+
+            <div class="form-group">
+                <label for="person_email">Attacker Email Address:</label>
+                <input type="email" class="form-control" name="person_email" id="person_email" placeholder="e.g., attacker@example.com">
+            </div>
+
+            <div class="form-group">
+                <label for="person_phone">Attacker Phone Number:</label>
+                <input type="number" class="form-control" name="person_phone" id="person_phone" placeholder="e.g., +1234567890">
+            </div>
+
+            <div class="form-group">
+                <label for="ransomware_file">Upload Ransomware Sample:</label>
+                <input type="file" class="form-control" name="ransomware_file" id="ransomware_file" accept=".exe,.dll,.bin,.jar,.ps1,.vbs,.js" multiple>
+                <small class="form-text text-muted">Allowed file types: .exe, .dll, .bin, .jar, .ps1, .vbs, .js</small>
+            </div>
+
+            <div class="form-group">
+                <label for="ransomware_screenshot">Upload Screenshot of Ransomware Pop-Up:</label>
+                <input type="file" class="form-control" name="ransomware_screenshot" id="ransomware_screenshot" accept=".png,.jpg,.jpeg,.pdf" multiple>
+                <small class="form-text text-muted">Allowed file types: .png, .jpg, .jpeg, .pdf</small>
+            </div>
+        </div>
+
+        {% include 'spinner.html' %}
+
+        <div class="text-center">
+            <button type="submit" class="btn custom-btn mt-3">Submit Report</button>
+        </div>
+
+    </form>
+</div>
+
+{% endblock %}

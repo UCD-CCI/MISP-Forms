@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Report Invoice Diversion Fraud{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2><i class="fas fa-receipt"></i> Report Invoice Diversion Fraud</h2>
+    <p class="info-box">
+        Invoice Diversion Fraud (also known as Mandate Fraud or Business Email Compromise) is a type of financial fraud where a scammer impersonates a legitimate supplier, vendor, or business partner and tricks the victim into redirecting payments to a fraudulent bank account. This is typically achieved through phishing emails, intercepted communications, or forged invoices.
+        The fraud often targets businesses, exploiting vulnerabilities in payment processes, and can lead to significant financial losses if not detected in time.
+        <br>
+
+    </p>
+
+
+    <!-- Flash Messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="flash-message {{ category }}">
+        {{ message|safe }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+
+    <form method="POST" action="{{ url_for('invoice.invoice_diversion') }}" onsubmit="showSpinner()">
+
+
+        <!-- organisation Selection -->
+        <h5>Organisation</h5>
+        <div class="mb-3 p-3 border rounded" style="border: 2px solid #178f8f;">
+            <label for="organisation" class="form-label">Select organisation (Required)</label>
+            <select class="form-control" name="organisation" id="organisation" required>
+                <option value="" disabled selected>Select an organisation</option>
+                {% for org in available_organisations %}
+                <option value="{{ org }}">{{ org }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+
+        <!-- Sharing Options -->
+<h5>Sharing Options</h5>
+
+
+        <div class="mb-3 p-3 border rounded" style="border: 2px solid #178f8f;">
+            {% include 'event_sharing_lite.html' %}
+        </div>
+
+
+        <!-- Incident Details -->
+        <h5>Incident Details {% with href="https://mkdocs.underserved.org" %} {% include 'help.html' %} {% endwith %}</h5>
+        <div class="mb-3 p-3 border rounded" style="border:2px solid #178f8f;">
+
+            <div class="row">
+                <!-- Date -->
+                <div class="col-md-6 mb-3">
+                    <label for="date" class="form-label">Date of Attack: (Required)</label>
+                    <input type="date" class="form-control" name="date" id="date" value="{{ today_date }}" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="time" class="form-label">Time of Attack:</label>
+                    <input type="time" class="form-control" name="time" id="time" required>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="victim_email" class="form-label">Victim Email:</label>
+                <input type="email" class="form-control" id="victim_email" name="victim_email" placeholder="Enter the victim's email address">
+            </div>
+
+            <div class="mb-3">
+                <label for="attacker_email" class="form-label">Attacker Email:</label>
+                <input type="email" class="form-control" id="attacker_email" name="attacker_email" placeholder="Enter the attacker's email address">
+            </div>
+
+            <div class="mb-3">
+                <label for="attacker_email" class="form-label">Attacker Phone Number:</label>
+                <input type="number" class="form-control" id="attacker_number" name="attacker_number" placeholder="Enter the attacker's phone number">
+            </div>
+
+
+            <div class="mb-3">
+                <label for="bank_account" class="form-label">Fraudulent Bank Account:</label>
+                <input type="text" class="form-control" id="bank_account" name="bank_account" placeholder="Enter the fraudulent bank account">
+            </div>
+
+            <div class="mb-3">
+                <label for="payment_reference" class="form-label">Payment Reference:</label>
+                <input type="text" class="form-control" id="payment_reference" name="payment_reference" placeholder="Enter the payment reference">
+            </div>
+
+            <div class="mb-3">
+                <label for="narrative" class="form-label">Description (Required):</label>
+                <textarea class="form-control" id="narrative" name="narrative" rows="3" placeholder="Provide a description of the incident." Required></textarea>
+            </div>
+
+            {% include 'spinner.html' %}
+
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn custom-btn">Submit Report</button>
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

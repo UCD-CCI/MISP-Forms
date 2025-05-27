@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}Website Defacement Report{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2><i class="fa-solid fa-skull-crossbones"></i> Report Website Defacement</h2>
+   <p class="info-box">
+        Website Defacement is an attack where an intruder gains unauthorized access to a website and alters
+        its appearance or content. Typically, attackers replace the site's content with their own messages, often to
+        display political or social statements, spread misinformation, or damage the site's reputation. Defacement is
+        commonly achieved by exploiting vulnerabilities in the website's software or server configuration, allowing
+        attackers to modify the files or database entries that control the website's visual content.
+    </p>
+
+
+
+         <!-- Flash Messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="flash-message {{ category }}">
+        {{ message|safe }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+
+
+
+
+    <form method="POST" action="/web_defacement" enctype="multipart/form-data" onsubmit="showSpinner()">
+
+
+        <!-- organisation Selection -->
+        <h5>Organisation</h5>
+        <div class="mb-3 p-3 border rounded" style="border: 2px solid #178f8f;">
+            <label for="organisation" class="form-label">Select organisation (Required)</label>
+            <select class="form-control" name="organisation" id="organisation" required>
+                <option value="" disabled selected>Select an organisation</option>
+                {% for org in available_organisations %}
+                <option value="{{ org }}">{{ org }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+
+        <!-- Sharing Options -->
+        <h5>Sharing Options</h5>
+
+        <div class="mb-3 p-3 border rounded" style="border: 2px solid #178f8f;">
+            {% include 'event_sharing_lite.html' %}
+        </div>
+
+
+        <!-- Incident Details -->
+        <h5>Incident Details {% with href="https://mkdocs.underserved.org" %} {% include 'help.html' %} {% endwith %}</h5>
+        <div class="mb-3 p-3 border rounded" style="border:2px solid #178f8f;">
+            <div class="row">
+                <!-- Date -->
+                <div class="col-md-6 mb-3">
+                    <label for="date" class="form-label">Date of Attack: (Required)</label>
+                    <input type="date" class="form-control" name="date" id="date" value="{{ today_date }}" value="{{ today_date }}" required>
+                </div>
+
+                <!-- Time -->
+                <div class="col-md-6 mb-3">
+                    <label for="time" class="form-label">Time of Attack:</label>
+                    <input type="time" class="form-control" name="time" id="time" required>
+                </div>
+            </div>
+
+            <!-- URL -->
+            <div class="mb-3">
+                <label for="url" class="form-label">Website Full URL (Required)</label>
+                <input class="form-control" id="url" name="url" placeholder="Enter Full website URL, e.g. https://www.mysite.com" required>
+            </div>
+
+            <!-- Attacker IP -->
+            <div class="mb-3">
+                <label for="attacker_ip" class="form-label">Attacker IP</label>
+                <input type="text" class="form-control" id="attacker_ip" name="attacker_ip" placeholder="e.g. 192.168.1.1" pattern="(?:\d{1,3}\.){3}\d{1,3}"  inputmode="numeric"  placeholder="e.g. 192.168.1.1">
+            </div>
+
+            <!-- Threat Actor -->
+            <div class="mb-3">
+                <label for="threat_actor" class="form-label">Threat Actor</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="threat_actor" name="threat_actor" placeholder="Enter Threat Actor name (optional)">
+                    <a href="https://attack.mitre.org/groups/" class="btn btn-outline-info" target="_blank" rel="noopener noreferrer">
+                        <img src="{{ url_for('static', filename='images/threat_actor.png') }}" alt="CVE" style="height: 22px; width: 22px; margin-right: 5px;"> Threat Actors
+                    </a>
+                </div>
+            </div>
+
+            <!-- Defacement Message -->
+            <div class="mb-3">
+                <label for="defacement_message" class="form-label">Defacement Message</label>
+                <textarea class="form-control" id="defacement_message" name="defacement_message" rows="3" placeholder="Enter the defacement message"></textarea>
+            </div>
+
+            <!-- Vulnerability -->
+            <div class="mb-3">
+                <label for="vulnerability" class="form-label">Exploited Vulnerability</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="vulnerability" name="vulnerability" placeholder="Enter the vulnerability (optional)">
+                    <a href="https://vulnerability.circl.lu" class="btn btn-outline-info" target="_blank" rel="noopener noreferrer">
+                        <img src="{{ url_for('static', filename='images/cve.png') }}" alt="CVE" style="height: 22px; width: 22px; margin-right: 5px;"> Vulnerability Lookup
+                    </a>
+                </div>
+            </div>
+
+            <!-- Screenshot -->
+            <div class="mb-3">
+                <label for="screenshot" class="form-label">Screenshot of Defaced Website</label>
+                <input type="file" class="form-control" id="screenshot" name="screenshot" accept=".png,.jpg,.jpeg,.gif">
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3">
+                <label for="description" class="form-label">Description (Required)</label>
+                <textarea class="form-control" id="description" name="description" rows="4" placeholder="Provide a description of the incident." required></textarea>
+            </div>
+        </div>
+
+        <!-- Spinner -->
+        {% include 'spinner.html' %}
+
+        <!-- Submit Button -->
+        <div class="text-center">
+            <button type="submit" class="btn custom-btn">Submit Report</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

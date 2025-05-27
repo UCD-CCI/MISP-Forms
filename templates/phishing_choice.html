@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}MISP-FORMS{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2><i class="fas fa-at"></i> Report Phishing</h2>
+
+    <p class="info-box">
+        A phishing email is a deceptive message sent by attackers to trick recipients into revealing sensitive information,
+        such as login credentials, credit card numbers, or personal data. These emails often appear to be from trusted sources,
+        like banks, well-known companies, or government agencies, and may include urgent language to pressure recipients into
+        taking immediate action.
+
+        Phishing emails typically contain links to fake websites that mimic legitimate ones or include malicious attachments.
+        Once the user interacts with these links or downloads the attachments, attackers can steal information, install malware,
+        or gain unauthorized access to the user's accounts. The goal is to exploit human trust and curiosity to compromise security.
+    </p>
+
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="menu-btn">
+                <a href="{{ url_for('upload_eml.upload_eml') }}" class="btn btn-blue btn-lg btn-block">
+                    Upload Phishing Email (.eml file)
+                </a>
+            </div><br>
+            <p>A .eml file is an email message saved in the format used by various email clients, such as Microsoft Outlook,
+               Mozilla Thunderbird, Apple Mail, and webmail clients. It contains the content of the email, including body text,
+               subject, sender, recipient, attachments, and metadata like timestamps and headers (e.g., To, From, Subject, Date, MIME type, etc.).
+            </p>
+        </div>
+
+        <div class="col-md-6">
+            <div class="menu-btn">
+                <a href="{{ url_for('phishing.phishing') }}" class="btn btn-blue btn-lg btn-block">
+                    Submit Phishing Email Details via Form
+                </a>
+            </div><br>
+            <p>You can manually enter phishing email details using this form, such as the date, sender, recipient, subject,
+               body text, and URLs. Please take caution when copying URLs and handling attachments. Avoid clicking on
+               any links in phishing emails. If you prefer to avoid manually copying details, consider using the
+               "Upload .eml file" option above.
+            </p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

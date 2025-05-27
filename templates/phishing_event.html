@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}Report Phishing Email{% endblock %}
+
+
+
+{% block content %}
+<div class="container mt-5">
+    <h2 style="color:#042139">Report Phishing Email</h2>
+    <p class="p-3 rounded" style="background-color: #178f8f; color: white;">
+        A phishing email is a deceptive message sent by attackers to trick recipients into revealing sensitive information,
+        such as login credentials, credit card numbers, or personal data. These emails often appear to be from trusted sources,
+        like banks, well-known companies, or government agencies, and may include urgent language to pressure recipients into
+        taking immediate action.
+
+        Phishing emails typically contain links to fake websites that mimic legitimate ones or include malicious attachments.
+        Once the user interacts with these links or downloads the attachments, attackers can steal information, install malware,
+        or gain unauthorized access to the user's accounts. The goal is to exploit human trust and curiosity to compromise security.
+    </p>
+    <hr>
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="mt-3">
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+    <form method="POST" action="/phishing_event" enctype="multipart/form-data" onsubmit="showSpinner()">
+        <!-- Distribution -->
+        <div class="form-group">
+            <label for="distribution">Distribution:</label>
+            <select class="form-control" name="distribution" id="distribution">
+                <option value="0">Your Organisation Only</option>
+                <option value="1">This Community Only</option>
+                <option value="2">Connected Communities</option>
+                <option value="3">All Communities</option>
+            </select>
+        </div>
+
+        <!-- Threat Level -->
+        <div class="form-group">
+            <label for="threat_level_id">Threat Level:</label>
+            <select class="form-control" name="threat_level_id" id="threat_level_id">
+                <option value="1">High</option>
+                <option value="2">Medium</option>
+                <option value="3">Low</option>
+                <option value="4">Undefined</option>
+            </select>
+        </div>
+
+        <!-- Analysis -->
+        <div class="form-group">
+            <label for="analysis">Analysis:</label>
+            <select class="form-control" name="analysis" id="analysis">
+                <option value="0">Initial</option>
+                <option value="1">Ongoing</option>
+                <option value="2">Completed</option>
+            </select>
+        </div>
+
+        <!-- TLP -->
+        <div class="form-group">
+            <label for="tlp">Traffic Light Protocol (TLP):</label>
+            <select class="form-control" id="tlp" name="tlp" onchange="updateTLPBackground(this)">
+                <option value="TLP:RED" style="background-color: #ffcccc;">TLP:RED - For recipient(s) only</option>
+                <option value="TLP:AMBER" style="background-color: #fff4cc;">TLP:AMBER - Limited disclosure to those who need to know</option>
+                <option value="TLP:GREEN" style="background-color: #ccffcc;">TLP:GREEN - Limited disclosure to the community</option>
+                <option value="TLP:WHITE" style="background-color: #ffffff;">TLP:WHITE - Public information</option>
+            </select>
+        </div>
+
+        <!-- Email Sender -->
+        <div class="mb-3">
+            <label for="email_sender" class="form-label">Email Sender</label>
+            <input type="email" class="form-control" id="email_sender" name="email_sender" placeholder="Enter sender's email address" required>
+        </div>
+
+        <!-- Subject -->
+        <div class="mb-3">
+            <label for="subject" class="form-label">Email Subject</label>
+            <input type="text" class="form-control" id="subject" name="subject" placeholder="Enter email subject" required>
+        </div>
+
+        <!-- Email Body -->
+        <div class="mb-3">
+            <label for="body" class="form-label">Email Body</label>
+            <textarea class="form-control" id="body" name="body" rows="5" placeholder="Paste the email body content"></textarea>
+        </div>
+
+        <!-- URLs -->
+        <div class="mb-3">
+            <label for="urls" class="form-label">URLs Found in Email</label>
+            <textarea class="form-control" id="urls" name="urls" rows="3" placeholder="Enter each URL on a new line"></textarea>
+        </div>
+
+        <!-- Attachment -->
+        <div class="mb-3">
+            <label for="attachment" class="form-label">Attachment</label>
+            <input type="file" class="form-control" id="attachment" name="attachment" accept=".eml,.pdf,.docx,.xlsx,.zip,.rar">
+        </div>
+
+        <!-- Spinner -->
+        <div id="loading-spinner" style="display: none; text-align: center;">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2">Processing... Please wait</p>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-info">Submit Report to MISP</button>
+    </form>
+</div>
+
+<script>
+    function showSpinner() {
+        document.getElementById('loading-spinner').style.display = 'block';
+    }
+
+    function updateTLPBackground(selectElement) {
+        const bgColorMap = {
+            "TLP:RED": "#ffcccc",
+            "TLP:AMBER": "#fff4cc",
+            "TLP:GREEN": "#ccffcc",
+            "TLP:WHITE": "#ffffff"
+        };
+        const selectedValue = selectElement.value;
+        selectElement.style.backgroundColor = bgColorMap[selectedValue];
+    }
+
+    document.getElementById('tlp').style.backgroundColor = "#ffcccc"; // Default to TLP:RED
+</script>
+{% endblock %}

@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}Report SQL Injection Attack{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2><i class="fas fa-syringe"></i> Report SQL Injection Attack</h2>
+    <p class="info-box">
+        A SQL injection attack is a type of cyberattack where a hacker tricks a website into giving them unauthorized access to
+        its database. They do this by entering special commands (instead of normal input) into a login form or search bar.
+        If the website isn’t properly secured, it mistakenly runs those commands, allowing the hacker to steal, change,
+        or even delete important data—like passwords, credit card details, or private messages.
+
+    </p>
+
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="flash-message {{ category }}">
+        {{ message|safe }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+    <form method="POST" action="{{ url_for('sql_injection.sql_injection') }}" onsubmit="showSpinner()">
+
+
+        <!-- Organisation Selection -->
+        <h5>Organisation</h5>
+        <div class="mb-3 p-3 border rounded" style="border: 2px solid #178f8f;">
+            <label for="organisation" class="form-label">Select Organisation (Required)</label>
+            <select class="form-control" name="organisation" id="organisation" required>
+                <option value="" disabled selected>Select an organisation</option>
+                {% for org in available_organisations %}
+                <option value="{{ org }}">{{ org }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+
+        <!-- Sharing Options -->
+<h5>Sharing Options</h5>
+
+
+        <div class="mb-3 p-3 border rounded" style="border: 2px solid #178f8f;">
+            {% include 'event_sharing_lite.html' %}
+        </div>
+
+
+        <!-- Incident Details -->
+        <h5>Incident Details {% with href="https://mkdocs.underserved.org" %} {% include 'help.html' %} {% endwith %}</h5>
+        <div class="mb-3 p-3 border rounded" style="border:2px solid #178f8f;">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="date" class="form-label">Date of Attack: (Required)</label>
+                    <input type="date" class="form-control" name="date" id="date" value="{{ today_date }}" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="time" class="form-label">Time of Attack: (Required)</label>
+                    <input type="time" class="form-control" name="time" id="time" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="target_url">Full Target URL: (Required)</label>
+                <input class="form-control" name="target_url" id="target_url" placeholder="https://mysite.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="affected_database">Affected Database program: (Required)</label>
+                <input type="text" class="form-control" name="affected_database" id="affected_database" placeholder="e.g., MySQL, PostgreSQL" required>
+            </div>
+
+            <div class="form-group">
+                <label for="attacker_ip">Attacker IP:</label>
+                <input class="form-control" name="attacker_ip" id="attacker_ip" type="text" id="ip" name="ip"  pattern="(?:\d{1,3}\.){3}\d{1,3}"  inputmode="numeric"  placeholder="e.g., 192.168.1.1">
+            </div>
+
+            <div class="form-group">
+                <label for="payload">SQL Payload: </label>
+                <textarea class="form-control" name="payload" id="payload" rows="4" placeholder="Malicious SQL payload used in the attack"></textarea>
+            </div>
+
+             <div class="mb-3">
+                <label for="vulnerability" class="form-label">Exploited Vulnerability: </label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="vulnerability" name="vulnerability" placeholder="Enter the vulnerability">
+                    <a href="https://vulnerability.circl.lu" class="btn btn-outline-info" target="_blank" rel="noopener noreferrer">
+                        <img src="{{ url_for('static', filename='images/cve.png') }}" alt="CVE" style="height: 22px; width: 22px; margin-right: 5px;"> Vulnerability Lookup
+                    </a>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="threat_actor" class="form-label">Threat Actor: </label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="threat_actor" name="threat_actor" placeholder="Enter Threat Actor name">
+                    <a href="https://attack.mitre.org/groups/" class="btn btn-outline-info" target="_blank" rel="noopener noreferrer">
+                        <img src="{{ url_for('static', filename='images/threat_actor.png') }}" alt="CVE" style="height: 22px; width: 22px; margin-right: 5px;"> Threat Actors
+                    </a>
+                </div>
+</div>
+            <div class="form-group">
+                <label for="description">Description: (Required)</label>
+                <textarea class="form-control" name="description" id="description" rows="4" placeholder="Provide a description of the incident." required></textarea>
+            </div>
+
+            {% include 'spinner.html' %}
+
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn custom-btn">Submit Report</button>
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

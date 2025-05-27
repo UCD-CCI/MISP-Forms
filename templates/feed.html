@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--Add to CSS-->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #001f3f; /* Navy background */
+            color: white;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 1px auto;
+            background-color: #002b5c; /* Slightly lighter navy for container */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            padding: 10px;
+        }
+        h2 {
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #003366; /* Dark navy table background */
+            font-size: 14px;
+            border-radius: 8px;
+            overflow: hidden;
+            color: white;
+        }
+        thead {
+            background-color: #004080;
+            color: #ffffff;
+        }
+        th {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid #dee2e6;
+        }
+        th:first-child {
+            border-top-left-radius: 8px;
+        }
+        th:last-child {
+            border-top-right-radius: 8px;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #003d66;
+        }
+        tbody tr:hover {
+            background-color: #0059b3;
+        }
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+        a {
+            color: #66b2ff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 14px;
+            color: #cccccc;
+        }
+a {
+    color: white; /* Force links to be white */
+    text-decoration: none;
+}
+
+a:hover {
+    color: #66b2ff; /* Optional: a subtle hover color */
+    text-decoration: underline;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Event</th>
+                    <th>Date</th>
+                    <th>Organisation</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in events %}
+                <tr>
+<td><a href="https://misp.underserved.org/events/view/{{ event.id }}" target="_blank">{{ event.info }}</a></td>
+                    <td>{{ event.date }}</td>
+                    <td>{{ event.organisation }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

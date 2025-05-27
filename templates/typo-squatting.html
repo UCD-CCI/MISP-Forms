@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}MISP-FORMS{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2><i class="fas fa-house-crack"></i> Typo-Squatting (Analyse or Detect)</h2>
+
+    <p class="info-box">
+        Typo-squatting is a type of online scam where attackers create fake websites with names that are very similar
+        to real, trusted websites, often by using common typing mistakes. For example, if the real website is
+        "example.com", they might create "exmaple.com" or "examplle.com". When people accidentally visit these fake
+        sites, they might be tricked into sharing personal information, downloading harmful software, or even making
+        payments.
+    </p>
+
+    <hr style="border: 1px solid white;">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">
+            {{ message|safe }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% if result %}
+        <div class="alert alert-info mt-3" style="background-color: #e6f7ff; padding: 15px; border-left: 5px solid #0074D9; border-radius: 5px;">
+            <strong>{{ result }}</strong>
+        </div>
+    {% endif %}
+
+    <div style="display: flex; gap: 30px; flex-wrap: wrap;">
+
+        <div style="flex: 1; min-width: 300px; text-align: center;">
+            <h3>Analyse Typo-Squatting</h3>
+            <p class="info-box">The safest and most effective way to analyse and share information about a typo-squatting incident is by using Lookyloo.</p>
+
+            <form method="post" target="_blank" style="margin-top: 20px;">
+                <input type="text" name="url" placeholder="Enter Typo-Squatting Website address" required style="margin-bottom: 10px; width: 80%;">
+                <br>
+
+                <button type="submit" class="btn2 custom-btn" style="margin-top: 10px;">Analyse Website (Lookyloo)</button>
+            </form>
+
+            <br>
+
+            <div style="background-color: #001f3f; padding: 8px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); color: white; max-width: 400px; margin: 0 auto;">
+                <p>After analysis is complete, you can submit the website to MISP for sharing.</p>
+                <ol style="text-align: left;">
+                    <li>On the Lookyloo page, select <strong>Actions</strong>.</li>
+                    <li>Click <strong>Prepare to Push to MISP</strong>.</li>
+                    <li>Click <strong>Push to MISP</strong>.</li>
+                </ol>
+            </div>
+        </div>
+
+
+
+
+
+
+</div>
+{% endblock %}

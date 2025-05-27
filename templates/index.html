@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block title %}MISP-FORMS{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4" >
+    <div class="row">
+        <div class="col-md-6">
+                                    <div class="menu-btn mb-3">
+    <a href="{{ url_for('phishing.phishing_choice') }}" class="btn btn-blue btn-lg btn-block">
+        <i class="fas fa-at"></i> Phishing Email
+    </a>
+</div>
+                                    <div class="menu-btn mb-3">
+    <a href="{{ url_for('smishing.smishing') }}" class="btn btn-blue btn-lg btn-block">
+        <i class="fa-regular fa-message"></i> Smishing - Scam Text Message
+    </a>
+</div>
+<div class="menu-btn mb-3">
+    <a href="{{ url_for('xss.xss') }}" class="btn btn-blue btn-lg btn-block">
+        <i class="fas fa-shuffle"></i> Cross Site Scripting (XSS)
+    </a>
+</div>
+<div class="menu-btn mb-3">
+    <a href="{{ url_for('typo_squatting.typo_squatting') }}" class="btn btn-blue btn-lg btn-block">
+        <i class="fas fa-house-crack"></i> Typo-Squatting
+    </a>
+</div>
+            <div class="menu-btn mb-3">
+    <a href="{{ url_for('scam_website.scam_website') }}" class="btn btn-blue btn-lg btn-block">
+        <i class="fas fa-triangle-exclamation"></i> Scam or Suspicious Website
+    </a>
+</div>
+
+            <div class="menu-btn mb-3">
+    <a href="{{ url_for('malware.malware') }}" class="btn btn-blue btn-lg btn-block">
+        <i class="fas fa-virus"></i> Malware
+    </a>
+</div>
+
+            <div class="menu-btn mb-3">
+    <a href="{{ url_for('disinformation.disinformation') }}" class="btn btn-blue btn-lg btn-block">
+        <i class="fas fa-bullhorn"></i> Disinformation
+    </a>
+</div>
+
+                        <div class="menu-btn mb-3">
+    <a href="{{ url_for('social_eng.social_eng') }}" class="btn btn-blue btn-lg btn-block">
+        <i class="fas fa-people-arrows"></i> Social Engineering
+    </a>
+</div>
+
+                                                                                    <div class="menu-btn mb-3">
+    <a href="{{ url_for('password_attack.password_attack') }}" class="btn btn-blue btn-lg btn-block">
+        <i class="fas fa-key"></i> Password Attack
+    </a>
+</div>
+
+        </div>
+
+
+
+        <div class="col-md-6">
+
+            <div class="menu-btn mb-3">
+    <a href="{{ url_for('defacement.web_defacement') }}" class="btn btn-blue btn-lg btn-block">
+        <i class="fa-solid fa-skull-crossbones"></i> Website Defacement
+    </a>
+</div>
+
+            <div class="menu-btn mb-3">
+    <a href="{{ url_for('ddos.ddos') }}" class="btn btn-blue btn-lg btn-block">
+        <i class="fa-solid fa-robot"></i> Denial-of-Service (DoS/DDoS)
+    </a>
+</div>
+
+                                    <div class="menu-btn mb-3">
+    <a href="{{ url_for('quishing.quishing') }}" class="btn btn-blue btn-lg btn-block">
+        <i class="fas fa-qrcode"></i> Quishing - Scam QR Code
+    </a>
+</div>
+
+                                    <div class="menu-btn mb-3">
+    <a href="{{ url_for('invoice.invoice_diversion') }}" class="btn btn-blue btn-lg btn-block">
+        <i class="fas fa-receipt"></i> Invoice Diversion Fraud
+    </a>
+</div>
+
+                                                <div class="menu-btn mb-3">
+    <a href="{{ url_for('sql_injection.sql_injection') }}" class="btn btn-blue btn-lg btn-block">
+        <i class="fas fa-syringe"></i> SQL Injection
+    </a>
+</div>
+
+                                                            <div class="menu-btn mb-3">
+    <a href="{{ url_for('ransomware.ransomware') }}" class="btn btn-blue btn-lg btn-block">
+        <i class="fa-brands fa-bitcoin"></i> Ransomware
+    </a>
+</div>
+
+
+                                                            <div class="menu-btn mb-3">
+    <a href="{{ url_for('mitm.mitm') }}" class="btn btn-blue btn-lg btn-block">
+        <i class="fas fa-users"></i> Man-in-the-Middle
+    </a>
+</div>
+
+
+                                                                        <div class="menu-btn mb-3">
+    <a href="{{ url_for('vishing.vishing') }}" class="btn btn-blue btn-lg btn-block">
+        <i class="fas fa-phone"></i> Vishing (Voice Phishing)
+    </a>
+</div>
+                                                            <div class="menu-btn mb-3">
+    <a href="{{ url_for('dynamic_form.dynamic_form') }}" class="btn btn-blue btn-lg btn-block">
+        <i class="fas fa-list-check"></i> Custom Report (Advanced User)
+    </a>
+</div>
+
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

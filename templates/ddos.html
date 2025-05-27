@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+
+{% block title %}MISP-FORMS{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2><i class="fa-solid fa-robot"></i> Report a Denial-of-Service (DoS/DDoS) Attack</h2>
+    <p class="info-box">
+        A DoS (Denial of Service) attack is a malicious attempt to disrupt the normal functioning of a targeted server,
+        service, or network by overwhelming it with a flood of illegitimate requests. This excessive load exhausts the
+        system's resources, causing slowdowns, crashes, or complete inaccessibility to legitimate users.
+
+        A DDoS (Distributed Denial of Service) attack amplifies this impact by using multiple compromised systems, often
+        part of a botnet, to launch the attack simultaneously from various locations. This makes it harder to block and
+        identify the source of the traffic, creating a more severe disruption. Both attacks aim to interrupt service
+        availability, often for financial, political, or personal motives.
+
+    </p>
+
+
+    <!-- Flash Messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="flash-message {{ category }}">
+        {{ message|safe }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+    <form method="POST" action="/ddos">
+
+
+        <!-- organisation Selection -->
+        <h5>Organisation</h5>
+        <div class="mb-3 p-3 border rounded" style="border: 2px solid #178f8f;">
+            <label for="organisation" class="form-label">Select organisation (Required)</label>
+            <select class="form-control" name="organisation" id="organisation" required>
+                <option value="" disabled selected>Select an organisation</option>
+                {% for org in available_organisations %}
+                <option value="{{ org }}">{{ org }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+
+        <!-- Sharing Options -->
+<h5>Sharing Options</h5>
+
+
+        <div class="mb-3 p-3 border rounded" style="border: 2px solid #178f8f;">
+            {% include 'event_sharing_lite.html' %}
+        </div>
+
+
+        <h5>Incident Details {% with href="https://mkdocs.underserved.org" %} {% include 'help.html' %} {% endwith %}</h5>
+        <div class="mb-3 p-3 border rounded" style="border:2px solid #178f8f;">
+                    <div class="row">
+                <!-- Date -->
+                <div class="col-md-6 mb-3">
+                    <label for="date" class="form-label">Date of Attack: (Required)</label>
+                    <input type="date" class="form-control" name="date" id="date" value="{{ today_date }}" required>
+                </div>
+
+                <!-- Time -->
+                <div class="col-md-6 mb-3">
+                    <label for="time" class="form-label">Time of Attack:</label>
+                    <input type="time" class="form-control" name="time" id="time" required>
+                </div>
+            </div>
+
+
+            <!-- Source IP -->
+            <div class="mb-3">
+                <label for="source_ip" class="form-label">Source or Attacker IP(s) (Required)</label>
+                <input type="text" class="form-control" id="source_ip" name="source_ip" placeholder="Enter attacker IPs, separated by commas (e.g., 192.168.1.1, 10.0.0.1)" required pattern="(?:\d{1,3}\.\,){3}\d{1,3}"  inputmode="numeric"  placeholder="e.g. 192.168.1.1">
+            </div>
+
+            <!-- Target IP -->
+            <div class="mb-3">
+                <label for="target_ip" class="form-label">Target IP (Required)</label>
+                <input type="text" class="form-control" id="target_ip" name="target_ip" required pattern="(?:\d{1,3}\.){3}\d{1,3}"  inputmode="numeric"  placeholder="e.g. 192.168.1.1">
+            </div>
+
+            <!-- Target URL -->
+            <div class="mb-3">
+                <label for="target_url" class="form-label">Target Domain</label>
+                <input type="text" class="form-control" id="target_url" name="target_url" placeholder="Enter the target domain (e.g., example.com)">
+            </div>
+
+            <!-- Destination Port -->
+            <div class="mb-3">
+                <label for="port" class="form-label">Target Port</label>
+                <select class="form-control" id="port" name="port">
+                    <option value="20">20 (FTP - Data)</option>
+                    <option value="21">21 (FTP - Control)</option>
+                    <option value="22">22 (SSH)</option>
+                    <option value="23">23 (Telnet)</option>
+                    <option value="25">25 (SMTP)</option>
+                    <option value="53">53 (DNS)</option>
+                    <option value="80">80 (HTTP)</option>
+                    <option value="123">123 (NTP)</option>
+                    <option value="389">389 (LDAP)</option>
+                    <option value="443">443 (HTTPS)</option>
+                    <option value="445">445 (SMB)</option>
+                    <option value="1900">1900 (SSDP)</option>
+                    <option value="3306">3306 (MySQL)</option>
+                    <option value="3389">3389 (RDP)</option>
+                    <option value="5060">5060 (SIP)</option>
+                    <option value="11211">11211 (Memcached)</option>
+                </select>
+            </div>
+
+
+            <!-- Protocol -->
+            <div class="form-group">
+                <label for="protocol">Protocol:</label>
+                <select class="form-control" id="protocol" name="protocol">
+                    <option value="TCP">TCP</option>
+                    <option value="UDP">UDP</option>
+                    <option value="ICMP">ICMP</option>
+                    <option value="IP">IP</option>
+                </select>
+            </div>
+
+            <!-- Attack Type -->
+            <div class="form-group">
+                <label for="attack_type">Attack Type:</label>
+                <select class="form-control" id="attack_type" name="attack_type">
+                    <option value="amplification-attack">Amplification Attack</option>
+                    <option value="reflected-spoofed-attack">Reflected Spoofed Attack</option>
+                    <option value="slow-read-attack">Slow Read Attack</option>
+                    <option value="flooding-attack">Flooding Attack</option>
+                    <option value="post-attack">Post Attack</option>
+                    <option value="dns">DNS</option>
+                    <option value="tcp-syn">TCP SYN</option>
+                    <option value="udp">UDP</option>
+                </select>
+            </div>
+
+
+                        <!-- Threat Actor -->
+            <div class="mb-3">
+                <label for="threat_actor" class="form-label">Threat Actor</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="threat_actor" name="threat_actor" placeholder="Enter Threat Actor name (optional)">
+                    <a href="https://attack.mitre.org/groups/" class="btn btn-outline-info" target="_blank" rel="noopener noreferrer">
+                        <img src="{{ url_for('static', filename='images/threat_actor.png') }}" alt="CVE" style="height: 22px; width: 22px; margin-right: 5px;"> Threat Actors
+                    </a>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3">
+                <label for="description" class="form-label">Description (Required)</label>
+                <textarea class="form-control" id="description" name="description" rows="4" placeholder="Provide a description of the incident." required></textarea>
+            </div>
+
+            <!-- Spinner -->
+            {% include 'spinner.html' %}
+
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center">
+            <button type="submit" class="btn custom-btn">Submit Report</button>
+        </div>
+
+    </form>
+</div>
+
+{% endblock %}

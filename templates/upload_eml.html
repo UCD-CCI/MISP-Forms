@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}MISP-FORMS{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2><i class="fa-solid fa-upload"></i> Report Phishing Email (Upload .eml file)</h2>
+    <p class="info-box">
+        A .eml file is an email message saved in the format used by various email clients, such as Microsoft Outlook,
+        Mozilla Thunderbird, Apple Mail, and webmail clients. It contains the content of the email, including body text,
+        subject, sender, recipient, attachments, and metadata like timestamps and headers.
+    </p>
+
+
+
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="flash-message {{ category }}">
+        {{ message|safe }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+
+    <form method="POST" action="{{ url_for('upload_eml.upload_eml') }}" enctype="multipart/form-data" onsubmit="showSpinner()">
+
+        <!-- organisation Selection -->
+        <h5>Organisation</h5>
+        <div class="mb-3 p-3 border rounded" style="border: 2px solid #178f8f;">
+            <label for="organisation" class="form-label">Select organisation (Required)</label>
+            <select class="form-control" name="organisation" id="organisation" required>
+                <option value="" disabled selected>Select an organisation</option>
+                {% for org in available_organisations %}
+                <option value="{{ org }}">{{ org }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+
+        <!-- Sharing Options -->
+<h5>Sharing Options</h5>
+
+
+        <div class="mb-3 p-3 border rounded" style="border: 2px solid #178f8f;">
+            {% include 'event_sharing_lite.html' %}
+        </div>
+
+
+        <h5>File Upload</h5>
+
+        <div class="mb-3 p-3 border rounded" style="border: 2px solid #178f8f;">
+            <label for="eml_file" class="form-label">Upload .eml File (Required)</label>
+            <input type="file" class="form-control" id="eml_file" name="eml_file" accept=".eml" required>
+        </div>
+
+         {% include 'spinner.html' %}
+        <div class="text-center">
+            <button type="submit" class="btn custom-btn mt-2">Submit Report</button>
+        </div>
+
+    </form>
+</div>
+
+{% endblock %}

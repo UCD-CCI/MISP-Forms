@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cyber Attack News Feed</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #001f3f; /* Navy */
+            color: white;
+        }
+        .card {
+            background-color: #003366; /* Darker navy for card background */
+            color: white;
+            border-radius: 1rem; /* Rounded corners */
+            max-width: 100%; /* Optional: Limit card width */
+            margin: 0 auto; /* Center card */
+        }
+        .card a.btn {
+            background-color: #004080; /* Custom navy-ish button */
+            border: none;
+        }
+        .card a.btn:hover {
+            background-color: #0059b3;
+        }
+        .card-header {
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+<div style="
+    background: url('{{ url_for('static', filename='images/un_icon.png') }}') center center / 95% no-repeat fixed;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.08;
+">
+</div>
+    <div class="container mt-4">
+       <div class="d-flex align-items-center justify-content-center gap-3 mt-4 mb-3">
+            <a href="/">
+        <img src="{{ url_for('static', filename='images/banner.png') }}" alt="Logo" style="width: 80px; height: 80px;">
+    </a>
+
+    <h2 class="mb-0">RECENT CYBERSECURITY NEWS</h2>
+             <img src="{{ url_for('static', filename='images/news.png') }}" alt="NEWS FEED" style="width: 50px; height: 50px;">
+</div>
+
+        <hr class="border-light">
+
+        {% for article in articles %}
+        <div class="card border-primary mb-5">
+            <div class="card-header bg-primary text-white">
+                <h6 class="mb-0">{{ article.title }}</h6>
+            </div>
+            <div class="card-body">
+                <p class="card-text small">
+                   {{ article.summary|safe }}<br>
+                   <strong>Source: {{ article.source }}</strong>
+                   <small> - Published: {{ article.published }}</small><br>
+                </p>
+                <a href="{{ article.link }}" target="_blank" class="btn btn-primary btn-sm">Read More</a>
+            </div>
+        </div>
+        {% else %}
+            <p class="text-center">No articles found.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

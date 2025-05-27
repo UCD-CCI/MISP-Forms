@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Report Phishing Email{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2><i class="fa-regular fa-square-check"></i> Report Phishing Email</h2>
+    <p class="info-box">
+        Submit the details of the phishing email using the form below. Be cautious when handling URLs and
+        attachments from the email. If you have any concerns, consider using the
+        <a href="{{ url_for('upload_eml.upload_eml') }}" style="color: white; text-decoration: underline;">.eml upload form</a> instead.
+    </p>
+
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="flash-message {{ category }}">
+        {{ message|safe }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+
+    <form method="POST" action="{{ url_for('phishing.phishing') }}" enctype="multipart/form-data" onsubmit="showSpinner()">
+
+
+        <!-- organisation Selection -->
+        <h5>Organisation</h5>
+        <div class="mb-3 p-3 border rounded" style="border: 2px solid #178f8f;">
+            <label for="organisation" class="form-label">Select organisation (Required)</label>
+            <select class="form-control" name="organisation" id="organisation" required>
+                <option value="" disabled selected>Select an organisation</option>
+                {% for org in available_organisations %}
+                <option value="{{ org }}">{{ org }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+
+        <!-- Sharing Options -->
+<h5>Sharing Options</h5>
+
+
+        <div class="mb-3 p-3 border rounded" style="border: 2px solid #178f8f;">
+            {% include 'event_sharing_lite.html' %}
+        </div>
+
+
+        <!-- Incident Details -->
+        <h5>Incident Details {% with href="https://mkdocs.underserved.org" %} {% include 'help.html' %} {% endwith %}</h5>
+        <div class="mb-3 p-3 border rounded" style="border:2px solid #178f8f;">
+
+            <div class="mb-3">
+                <label for="date" class="form-label">Date of Incident:</label>
+                <input type="date" class="form-control" id="date" name="date" value="{{ today_date }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="email_sender" class="form-label">Email Sender:</label>
+                <input type="email" class="form-control" id="email_sender" name="email_sender" placeholder="Enter sender's email address" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="subject" class="form-label">Email Subject:</label>
+                <input type="text" class="form-control" id="subject" name="subject" placeholder="Enter email subject" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="body" class="form-label">Email Body:</label>
+                <textarea class="form-control" id="body" name="body" rows="5" placeholder="Paste the email body content" required></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="urls" class="form-label">URLs Found in Email:</label>
+                <textarea class="form-control" id="urls" name="urls" rows="3" placeholder="Enter each URL on a new line"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="attachment" class="form-label">Attachment:</label>
+                <input type="file" class="form-control" id="attachment" name="attachment" accept=".eml,.pdf,.docx,.xlsx,.zip,.rar">
+                <small class="form-text text-muted">
+                    Allowed file types: .eml, .pdf, .docx, .xlsx, .zip, .rar
+                </small>
+            </div>
+
+            {% include 'spinner.html' %}
+
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn custom-btn">Submit Report</button>
+        </div>
+
+    </form>
+</div>
+
+{% endblock %}

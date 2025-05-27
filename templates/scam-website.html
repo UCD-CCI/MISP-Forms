@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}MISP-FORMS{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <h2><i class="fas fa-triangle-exclamation"></i> Scam or Suspicious Website</h2>
+    <p class="info-box">
+        A scam website is a fake site designed to trick people into sharing personal information, such as passwords, credit card numbers,
+        or other sensitive data, or to steal money by pretending to offer products, services, or opportunities. These
+        sites often look very similar to real websites, using fake logos, names, or even slightly altered web addresses.
+        The goal is to deceive visitors and gain their trust so they fall for the scam.
+    </p>
+
+    <p>The safest and most effective way to share information about a Scam or Suspicious Website is by using Lookyloo.
+        Lookyloo securely captures and collects all relevant data from the targeted website.</p>
+
+<hr>
+    <form method="post" target="_blank">
+       <input type="text" name="url" placeholder="Enter Scam or Suspicious Website address" required size="40">
+
+
+        <button type="submit" class="btn2 custom-btn">Analyse Website</button>
+    </form>
+<br>
+     <div style="background-color: #001f3f; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+        <p>After analysis is complete, you can submit the website to MISP for sharing.</p>
+<ol>
+    <li>On the Lookyloo page, select <strong>Actions</strong>.</li>
+    <li>Click <strong>Prepare to Push to MISP</strong>.</li>
+    <li>Click <strong>Push to MISP</strong>.</li>
+</ol>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

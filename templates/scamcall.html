@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}MISP-FORMS{% endblock %}
+
+{% block content %}
+
+   <div class="messages">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul>
+                    {% for category, message in messages %}
+                        <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+    </div>
+<div class="container mt-5">
+    <h2 style="color:#042139">Report Scam Phone Call</h2>
+    <p class="info-box">
+        A scam call is a fraudulent phone call made with the intent to deceive the
+        recipient and gain access to sensitive information or money. Scammers often pose as representatives from trusted
+        organisations, such as government agencies, banks, or tech support services, to appear legitimate. These calls
+        may involve urgent language, threats, or enticing offers to pressure or lure the recipient into compliance.
+ Common types of scam calls include claims about unpaid taxes, compromised accounts, fake lottery winnings, or
+        technical issues that require immediate action. The ultimate goal is to convince the recipient to share personal
+        information, provide payment, or install malware, all of which compromise security and privacy.</p>
+
+
+    <form method="POST" action="/scamcall" enctype="multipart/form-data">
+
+
+        <div class="form-group">
+            <label for="distribution">Distribution:</label>
+            <select class="form-control" name="distribution" id="distribution">
+                <option value="0">Your Organisation Only</option>
+                <option value="1">This Community Only</option>
+                <option value="2">Connected Communities</option>
+                <option value="3">All Communities</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="threat_level_id">Threat Level:</label>
+            <select class="form-control" name="threat_level_id" id="threat_level_id">
+                <option value="1">High</option>
+                <option value="2">Medium</option>
+                <option value="3">Low</option>
+                <option value="4">Undefined</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="analysis">Analysis:</label>
+            <select class="form-control" name="analysis" id="analysis">
+                <option value="0">Initial</option>
+                <option value="1">Ongoing</option>
+                <option value="2">Completed</option>
+            </select>
+        </div>
+
+
+        <div class="form-group">
+            <label for="date">Date of Call:</label>
+            <input type="date" class="form-control" name="date" id="date">
+        </div>
+
+        <div class="form-group">
+            <label for="time">Time of Call:</label>
+            <input type="time" class="form-control" name="time" id="time">
+        </div>
+
+        <div class="form-group">
+            <label for="number">Phone Number</label>
+            <input type="text" class="form-control" name="number" id="number" required>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Call Details:</label>
+            <textarea class="form-control" name="description" id="description" rows="4" placeholder="An account of the incident by the victim can be useful to Law Enforcement."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="ip_address">IP Address:</label>
+            <input type="text" class="form-control" name="ip_address" id="ip_address">
+        </div>
+
+        <div class="form-group">
+            <label for="message">Defacement Message:</label>
+            <textarea class="form-control" name="message" id="message" rows="4" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="attack_method">Attack Method:</label>
+            <input type="text" class="form-control" name="attack_method" id="attack_method" placeholder="Describe the attack method">
+        </div>
+
+        <div class="form-group">
+            <label for="platform">Platform:</label>
+            <input type="text" class="form-control" name="platform" id="platform" placeholder="What platform?, e.fg nginx, apache, wordpress, drupal">
+        </div>
+
+        <div class="form-group">
+            <label for="screenshot">Upload Screenshot of Defaced Website:</label>
+            <input type="file" class="form-control" name="screenshot" id="screenshot" accept="image/*">
+        </div>
+
+        <button type="submit" class="btn custom-btn mt-3">Submit Incident Report</button>
+    </form>
+</div>
+
+{% endblock %}

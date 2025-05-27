@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}Report Social Engineering Attack{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <h2><i class="fas fa-people-arrows"></i> Report a Social Engineering Attack</h2>
+    <p class="info-box">
+        Social Engineering is a type of cyberattack that relies on psychological manipulation rather than technical hacking.
+        Instead of breaking into systems, attackers trick people into giving up confidential information, such as
+        passwords, financial details, or access to sensitive systems.
+
+
+    </p>
+
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="flash-message {{ category }}">
+        {{ message|safe }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+
+    <form method="POST" action="{{ url_for('social_eng.social_eng') }}" enctype="multipart/form-data" onsubmit="showSpinner()">
+
+
+        <!-- organisation Selection -->
+        <h5>Organisation</h5>
+        <div class="mb-3 p-3 border rounded" style="border: 2px solid #178f8f;">
+            <label for="organisation" class="form-label">Select organisation (Required)</label>
+            <select class="form-control" name="organisation" id="organisation" required>
+                <option value="" disabled selected>Select an organisation</option>
+                {% for org in available_organisations %}
+                <option value="{{ org }}">{{ org }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+
+        <!-- Sharing Options -->
+<h5>Sharing Options</h5>
+
+
+        <div class="mb-3 p-3 border rounded" style="border: 2px solid #178f8f;">
+            {% include 'event_sharing_lite.html' %}
+        </div>
+
+
+        <!-- Incident Details -->
+        <h5>Incident Details {% with href="https://mkdocs.underserved.org" %} {% include 'help.html' %} {% endwith %}</h5>
+        <div class="mb-3 p-3 border rounded" style="border: 2px solid #178f8f;">
+
+       <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="date" class="form-label">Date of Attack: (Required)</label>
+                    <input type="date" class="form-control" name="date" id="date" value="{{ today_date }}" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="time" class="form-label">Time of Attack:</label>
+                    <input type="time" class="form-control" name="time" id="time" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="attack_type">Type of Social Engineering Attack:</label>
+                <select class="form-control" name="attack_type" id="attack_type" required>
+                    <option value="Water-Holing">Water-Holing</option>
+                    <option value="Vishing">Vishing (Fraudulent Phone Call)</option>
+                    <option value="Baiting">Baiting (Fake Offers, Malware Downloads)</option>
+                    <option value="Pretexting">Pretexting (Impersonation for Information Theft)</option>
+                    <option value="Quid Pro Quo">Quid Pro Quo (Offering Something for Data)</option>
+                    <option value="Other">Other (Specify in Description)</option>
+                </select>
+            </div>
+
+
+            <div class="form-group">
+                <label for="attacker_name">Attacker Name or Alias:</label>
+                <input type="text" class="form-control" name="attacker_name" id="attacker_name" placeholder="e.g., Fake IT Support">
+            </div>
+
+            <div class="form-group">
+                <label for="attacker_email">Attacker Email Address:</label>
+                <input type="email" class="form-control" name="attacker_email" id="attacker_email" placeholder="e.g., fake_support@example.com">
+            </div>
+
+            <div class="form-group">
+                <label for="attacker_phone">Attacker Phone Number:</label>
+                <input type="text" class="form-control" name="attacker_phone" id="attacker_phone" >
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea class="form-control" name="description" id="description" rows="4" placeholder="Provide a description of the incident." required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="attack_evidence">Upload Evidence (Screenshot, Call Recording, Images, etc.) (Optional):</label>
+                <input type="file" class="form-control" name="attack_evidence" id="attack_evidence" accept=".png,.jpg,.jpeg,.pdf,.mp3,.wav" multiple>
+                <small class="form-text text-muted">
+                    Allowed file types: .png, .jpg, .jpeg, .pdf (screenshots) | .mp3, .wav (audio recordings)
+                </small>
+            </div>
+
+            {% include 'spinner.html' %}
+
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn custom-btn mt-3">Submit Report</button>
+        </div>
+
+    </form>
+</div>
+
+{% endblock %}

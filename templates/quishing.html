@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}QR Code Analysis{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2><i class="fas fa-qrcode"></i> Report Quishing - Scam QR Code</h2>
+    <p class="info-box">
+        Quishing is a type of phishing attack that uses QR codes to trick victims into
+        revealing sensitive information or downloading malicious content. In these attacks,
+        cybercriminals generate a QR code that, when scanned, redirects the victim to a fraudulent
+        website designed to steal credentials, personal information, or payment details.
+    </p>
+
+    <hr style="border: none; height: 2px; background-color: gray;">
+
+    <p style="font-size: 1.1rem; line-height: 1.6;">
+To report a Quishing incident, take a picture of the suspicious QR code and upload it. Once uploaded, The website address will be extracted from the image and can be safely analysed</p>
+
+
+    <div style="display: flex; align-items: flex-start; gap: 20px; margin-top: 20px;">
+        <form method="POST" action="/quishing" enctype="multipart/form-data" style="flex: 1;">
+
+            <div class="form-group">
+                <label for="qr_image" style="font-weight: bold;">Upload QR Code Image:</label>
+                <input type="file" class="btn custom-btn btn-block"  name="qr_image" id="qr_image" required>
+
+            </div>
+            <button type="submit" class="btn custom-btn btn-block  mt-3">Process QR Code</button>
+        </form>
+
+        {% if uploaded_image %}
+        <div>
+            <p style="color:#042139; font-weight: bold;">Uploaded QR Code</p>
+            <img src="{{ uploaded_image }}" alt="Uploaded QR Code"
+                 style="max-width: 150px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+        </div>
+        {% endif %}
+    </div>
+
+    {% if not extracted_urls and request.method == 'POST' %}
+    <div class="alert alert-warning mt-4">
+        <strong>No URLs Extracted:</strong> We couldn't find any URLs in the QR code.
+        <ul>
+            <li>Ensure the QR code is fully visible in the image.</li>
+            <li>Retake the photo in a well-lit environment.</li>
+            <li>Avoid blurry or low-resolution images.</li>
+        </ul>
+        Please try again with a clearer image of the QR code.
+    </div>
+
+    {% endif %}
+
+    {% if extracted_urls %}
+
+    <div style="background-color: #d9e8f5; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+        <p style="color:#042139; font-weight: bold;">Extracted Website Address</p>
+        <ul style="list-style-type: none; padding: 0; margin: 0;">
+            {% for url in extracted_urls %}
+            <li style="margin-bottom: 10px; padding: 10px; background-color: #ffffff; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <span style="font-size: 1rem; color: #042139; font-weight: bold;">{{ url }}</span>
+                    <form method="POST" action="/analyze_url"  target="_blank" style="display:inline; margin-left: 15px;">
+                        <input type="hidden" name="analyze_url" value="{{ url }}">
+                        <button type="submit" class="btn custom-btn btn-sm">Analyse Website</button>
+                    </form>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        <br>
+
+
+    </div>
+        <div style="background-color: #001f3f; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+        <p>After Lookyloo completes its analysis, you can submit the website to MISP for sharing.</p>
+<ol>
+    <li>On the Lookyloo page, select <strong>Actions</strong>.</li>
+    <li>Click <strong>Prepare to Push to MISP</strong>.</li>
+    <li>Click <strong>Push to MISP</strong>.</li>
+</ol>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

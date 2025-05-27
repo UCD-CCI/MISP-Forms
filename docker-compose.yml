@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  misp_forms:
+    build:
+      context: .
+    restart: always
+    ports:
+      - "5000:5000"

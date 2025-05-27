@@ -1,0 +1,52 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+
+<p>The default sharing options below are appropriate for most reports but please modify as necessary. If required, the platform administrator will adjust these values after submission.</p>
+
+<hr style="border: none; height: 2px; background-color: gray;">
+
+<div class="mb-3">
+    <label for="distribution" class="form-label">Distribution</label>
+    <select class="form-control" name="distribution" id="distribution">
+        <option value="1" selected>This Community Only</option>
+        <option value="2">Connected Communities</option>
+        <option value="0">Your Organisation Only</option>
+        <option value="3">All Communities</option>
+    </select>
+</div>
+
+<!-- Threat Level -->
+<div class="mb-3">
+    <label for="threat_level_id" class="form-label">Threat Level  (Required)</label>
+    <select class="form-control" name="threat_level_id" id="threat_level_id" required>
+        <option value="4" selected>Undefined</option>
+        <option value="1">High</option>
+        <option value="2">Medium</option>
+        <option value="3">Low</option>
+    </select>
+</div>
+
+<!-- Analysis -->
+<div class="mb-3">
+    <label for="analysis" class="form-label">Analysis (Required)</label>
+    <select class="form-control" name="analysis" id="analysis" required>
+        <option value="0" selected>Initial</option>
+        <option value="1">Ongoing</option>
+        <option value="2">Completed</option>
+    </select>
+</div>
+
+<!-- TLP -->
+<div class="form-group">
+  <label for="tlp">Traffic Light Protocol (TLP):</label>
+    <select class="form-control" id="tlp" name="tlp" onchange="updateTLPBackground(this)">
+      <option value="TLP:GREEN" selected>TLP:GREEN - Limited disclosure to the community</option>
+      <option value="TLP:RED" style="background-color: #ffcccc;">TLP:RED - For recipient(s) only</option>
+      <option value="TLP:AMBER" style="background-color: #fff4cc;">TLP:AMBER - Limited disclosure to those who need to know</option>
+      <option value="TLP:WHITE" style="background-color: #ffffff;">TLP:WHITE - Public information</option>
+    </select>
+</div>
+
+</html>

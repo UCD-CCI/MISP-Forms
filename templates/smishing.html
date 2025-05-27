@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Smishing Analysis{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2><i class="fa-regular fa-message"></i> Report Smishing - Scam Text Message</h2>
+
+    <p class="info-box">
+        Smishing is a type of phishing attack carried out through SMS (text messages).
+        It involves cybercriminals sending fraudulent messages to trick recipients
+        into revealing sensitive information, such as login credentials, financial details,
+        or personal data. These messages often appear to come from legitimate sources like banks,
+        delivery services, or government agencies and may include links to fake websites or instructions
+        to reply with sensitive information.
+    </p>
+
+    <hr style="border: none; height: 2px; background-color: gray;">
+
+    <p style="font-size: 1.1rem; line-height: 1.6;">
+        To report a smishing incident, take a screenshot of the text message and upload it.
+        The website address will be extracted from the image and can be safely analysed.<br>
+    </p>
+
+
+
+  
+    <div style="display: flex; align-items: flex-start; gap: 20px; margin-top: 20px;">
+       
+        <form method="POST" action="/smishing" onsubmit="showSpinner()" enctype="multipart/form-data" style="flex: 1;">
+
+            <div class="form-group">
+                <label for="image" style="font-weight: bold;">Upload Message Screenshot:</label>
+                <input type="file" class="btn custom-btn btn-block" name="image" id="image" required>
+            </div>
+
+            {% include 'spinner.html' %}
+            <button type="submit" class="btn custom-btn btn-block mt-3">Process Screenshot</button>
+        </form>
+
+ 
+{% if uploaded_image %}
+<div style="text-align: center; flex: 1;">
+    <p style="color:#ffffff; font-weight: bold;">Uploaded Screenshot</p>
+    <img src="{{ uploaded_image }}" alt="Uploaded Screenshot"
+         style="max-width: 80%; height: auto; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+</div>
+{% endif %}
+    </div>
+
+    {% if text %}
+
+    {% endif %}
+
+    {% if details and details.urls %}
+
+
+    <div style="background-color: #d9e8f5; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+        <p style="color:#042139; font-weight: bold;">Extracted Website Address - Confirm address is correct and edit if required.</p>
+        <ul style="list-style-type: none; padding: 0; margin: 0;">
+            {% for url in details.urls %}
+            <li style="margin-bottom: 10px; padding: 10px; background-color: #ffffff; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);">
+                <form method="POST" action="/analyse_url" target="_blank" style="display: flex; align-items: center; justify-content: space-between;">
+                    <input type="text" name="analyse_url" value="{{ url }}" class="form-control font-weight-bold text-primary" required>
+                    <button type="submit" class="btn custom-btn btn-sm ml-3">Analyse Website</button>
+                </form>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div style="background-color: #001f3f; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);" class="text-white mt-4">
+        <p>After Lookyloo completes its analysis, you can submit the website to MISP for sharing:</p>
+        <ol>
+            <li>Select <strong>Actions</strong> on the Lookyloo page.</li>
+            <li>Click <strong>Prepare to Push to MISP</strong>.</li>
+            <li>Click <strong>Push to MISP</strong>.</li>
+        </ol>
+    </div>
+
+    {% elif details and not details.urls %}
+
+    <div class="alert alert-warning mt-4">
+        <strong>No URLs Extracted:</strong> We couldn't find any URLs in the image.
+        <ul>
+            <li>Ensure the text message is clearly visible in the screenshot.</li>
+            <li>Crop out unrelated content.</li>
+            <li>Try again with a clearer image.</li>
+        </ul>
+        <p>You can also enter the website manually for analysis:</p>
+        <form method="POST" action="/smishing" onsubmit="showSpinner()" class="mt-3">
+            <div class="form-group">
+                <input type="text" class="form-control" name="manual_url" placeholder="Enter the URL here" required>
+            </div>
+            <button type="submit" class="btn custom-btn btn-block mt-2">Submit URL</button>
+        </form>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

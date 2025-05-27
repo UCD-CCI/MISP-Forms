@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Report Disinformation{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2><i class="fas fa-bullhorn"></i> Report Disinformation</h2>
+    <p class="info-box">
+        Disinformation is the deliberate spread of false or misleading information with the intent to deceive,
+        manipulate public perception, or influence behavior. Unlike misinformation, which is false information
+        shared without harmful intent, disinformation is intentionally crafted and distributed to achieve specific
+        objectives, such as political influence, social division, or economic gain. It often spreads through social
+        media, news outlets, and other digital platforms, exploiting emotional responses and confirmation biases to maximize impact.
+    </p>
+
+
+
+    <!-- Flash Messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="flash-message {{ category }}">
+        {{ message|safe }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+    <form method="POST" action="/disinformation" onsubmit="showSpinner()">
+
+
+        <!-- organisation Selection -->
+        <h5>Organisation</h5>
+        <div class="mb-3 p-3 border rounded" style="border: 2px solid #178f8f;">
+            <label for="organisation" class="form-label">Select organisation (Required)</label>
+            <select class="form-control" name="organisation" id="organisation" required>
+                <option value="" disabled selected>Select an organisation</option>
+                {% for org in available_organisations %}
+                <option value="{{ org }}">{{ org }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+
+        <!-- Sharing Options -->
+<h5>Sharing Options</h5>
+
+
+        <div class="mb-3 p-3 border rounded" style="border: 2px solid #178f8f;">
+            {% include 'event_sharing_lite.html' %}
+        </div>
+
+
+        <!-- Incident Details -->
+        <h5>Incident Details {% with href="https://mkdocs.underserved.org" %} {% include 'help.html' %} {% endwith %}</h5>
+        <div class="mb-3 p-3 border rounded" style="border: 2px solid #178f8f;">
+            <div class="row">
+                <!-- Date -->
+                <div class="col-md-6 mb-3">
+                    <label for="date" class="form-label">Date Observed: (Required)</label>
+                    <input type="date" class="form-control" name="date" id="date" value="{{ today_date }}" required>
+                </div>
+
+                <!-- Time -->
+                <div class="col-md-6 mb-3">
+                    <label for="time" class="form-label">Time Observed:</label>
+                    <input type="time" class="form-control" name="time" id="time" required>
+                </div>
+            </div>
+
+            <!-- URL -->
+            <div class="mb-3">
+                <label for="url" class="form-label">Link to Source (Required)</label>
+                <input type="url" class="form-control" id="url" name="url" placeholder="e.g. https://x.com/zyz/123" required>
+            </div>
+
+            <!-- Narrative -->
+            <div class="mb-3">
+                <label for="narrative" class="form-label">Disinformation Narrative (Required)</label>
+                <textarea class="form-control" id="narrative" name="narrative" rows="3" placeholder="Provide a description of the incident." required></textarea>
+            </div>
+        </div> <!-- Closing Incident Details Section -->
+
+        <!-- Spinner -->
+        {% include 'spinner.html' %}
+
+        <!-- Submit Button -->
+        <div class="text-center">
+            <button type="submit" class="btn custom-btn">Submit Report</button>
+
+        </div>
+
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}MISP-FORMS{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Recent MISP Events</h2>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Info</th>
+                <th>Date</th>
+                <th>Threat Level</th>
+                <th>Organisation</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in events %}
+            <tr>
+                <td><a href="https://misp.underserved.org/events/view/{{ event.id }}">{{ event.id }}</a></td>
+                <td>{{ event.info }}</td>
+                <td>{{ event.date }}</td>
+                <td>{{ event.threat_level }}</td>
+                <td>{{ event.organisation }}</td>
+            </tr>
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

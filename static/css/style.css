@@ -1,0 +1,263 @@
+/* Base Layout */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #243d8d;
+    color: white;
+    line-height: 1.6;
+}
+
+/* General Container */
+.container {
+    max-width: 60%;
+    margin: 2rem auto;
+    padding: 1rem;
+    background-color: #243d8d;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    border: 0px solid white;
+    box-sizing: border-box;
+}
+
+/* Top Bar */
+.top-bar {
+    background-color: #243d8d;
+    padding: 10px 20px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #77b2f1;
+    border-top: 2px solid #77b2f1;
+    flex-wrap: wrap;
+}
+
+.top-bar img {
+    max-width: 150px;
+    height: auto;
+
+}
+
+.banner-section {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap; /* Makes it responsive */
+    text-align: left;
+
+}
+
+.banner-img {
+    max-width: 150px;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.banner-text {
+    max-width:90%;
+    padding: 50px;
+    border: 2px solid #ffffff;
+    border-radius: 22px;
+    background-color: rgba(36, 61, 141, 0.6); /* semi-transparent background to match theme */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.banner-text {
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.banner-tagline {
+    font-size: 1.9rem;
+    font-weight: 600;
+    color: #ffffff;
+    text-shadow: 1px 1px 2px #000000;
+    margin: 0;
+}
+
+
+
+
+/* Info Box */
+.info-box {
+    background-color: #004080;
+    color: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+/* Button Styling */
+.btn-custom,
+.btn-blue,
+.custom-btn {
+    background: linear-gradient(145deg, #0088cc, #005fa3);
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    display: inline-block;
+    margin: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.btn-custom:hover,
+.btn-blue:hover,
+.custom-btn:hover {
+    background: linear-gradient(145deg, #339dff, #006bb3);
+    transform: scale(1.05);
+}
+
+/* Menu Buttons */
+.menu-btn {
+    text-align: center;
+    display: block;
+    width: 100%;
+}
+
+/* Content Block */
+.content {
+    width: 100%;
+    margin: 10px auto;
+}
+
+/* Custom Sub-Container */
+.custom-container {
+    border: 1px solid #004080;
+    padding: 20px;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    border-radius: 12px;
+    background-color: #003d66;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #003366;
+    font-size: 14px;
+    border-radius: 8px;
+    overflow: hidden;
+    color: white;
+    margin-top: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+thead {
+    background-color: #004080;
+    color: #ffffff;
+}
+
+th, td {
+    padding: 14px;
+    text-align: left;
+    border-bottom: 1px solid #004080;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #003d66;
+}
+
+tbody tr:hover {
+    background-color: #0059b3;
+}
+
+/* Links */
+a {
+    color: #66b2ff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #ffffff;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 0.9rem;
+    color: #cccccc;
+}
+
+/* ===== Responsive Adjustments ===== */
+
+@media (max-width: 768px) {
+    .container {
+        max-width: 95%;
+        margin: 1rem auto;
+        padding: 1rem;
+    }
+
+    .banner-container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .banner-container h2 {
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+
+    .highlight-text {
+        font-size: 1rem;
+        padding: 1.5rem;
+        border-radius: 25px;
+    }
+
+    .top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .btn-custom,
+    .btn-blue,
+    .custom-btn {
+        width: 100%;
+        font-size: 1rem;
+        padding: 10px;
+    }
+
+    table {
+        font-size: 12px;
+    }
+
+    th, td {
+        padding: 10px;
+    }
+
+    .content {
+        width: 100%;
+    }
+
+    .highlight-text {
+        min-width: auto;
+        width: 100%;
+    }
+}
+.flash-message {
+    text-align: center;         /* Center the text */
+    padding: 20px;              /* Increase padding (height) */
+    margin: 10px auto;          /* Center the box itself horizontally */
+    width: 100%;                 /* Optional: make it a bit narrower */
+    border: 4px solid #228B22;     /* Light border */
+    border-radius: 8px;         /* Rounded corners */
+    font-size: 1.2em;           /* Slightly bigger text */
+}

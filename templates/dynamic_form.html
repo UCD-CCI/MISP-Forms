@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+
+{% block title %}Custom Report{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2><i class="fas fa-database"></i> Custom Report (Advanced User)</h2>
+    <p class="info-box">
+        This form allows you to build a custom event consisting of selected attributes. You can select a <strong>category</strong>, choose an <strong>attribute type</strong>,
+        and enter a value. You may add multiple attributes.
+    </p>
+
+
+    <!-- Flash Messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="flash-message {{ category }}">
+        {{ message|safe }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+
+    <form method="POST" action="{{ url_for('dynamic_form.dynamic_form') }}" enctype="multipart/form-data" onsubmit="showSpinner()">
+
+
+        <!-- organisation Selection -->
+        <h5>Organisation</h5>
+        <div class="mb-3 p-3 border rounded" style="border: 2px solid #178f8f;">
+            <label for="organisation" class="form-label">Select organisation (Required)</label>
+            <select class="form-control" name="organisation" id="organisation" required>
+                <option value="" disabled selected>Select an organisation</option>
+                {% for org in available_organisations %}
+                <option value="{{ org }}">{{ org }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+
+        <!-- Sharing Options -->
+<h5>Sharing Options</h5>
+
+
+        <div class="mb-3 p-3 border rounded" style="border: 2px solid #178f8f;">
+            {% include 'event_sharing_lite.html' %}
+        </div>
+
+
+        <!-- Incident Details -->
+        <h5>Build an Incident Report</h5>
+        <div class="mb-3 p-3 border rounded" style="border:2px solid #178f8f;">
+         <div class="row">
+                <!-- Date -->
+                <div class="col-md-6 mb-3">
+                    <label for="date" class="form-label">Date of Attack: (Required)</label>
+                    <input type="date" class="form-control" name="date" id="date" value="{{ today_date }}" required>
+                </div>
+
+                <!-- Time -->
+                <div class="col-md-6 mb-3">
+                    <label for="time" class="form-label">Time of Attack:</label>
+                    <input type="time" class="form-control" name="time" id="time" required>
+                </div>
+            </div>
+
+            <!-- Event Title -->
+            <div class="form-group">
+                <label for="info">Event Title (Required):</label>
+                <input type="text" class="form-control" name="info" id="info" placeholder="Enter a brief event description" required>
+            </div>
+
+            <!-- Event Description -->
+            <div class="mb-3">
+                <label for="description" class="form-label">Description (Required)</label>
+                <textarea class="form-control" id="description" name="description" rows="4" placeholder="Provide a description of the incident." required></textarea>
+            </div>
+
+            <!-- Tags Input -->
+            <div class="mb-3">
+                <label for="tags" class="form-label">Tags (comma-separated):</label>
+                <input type="text" class="form-control" name="tags" id="tags" placeholder="e.g., phishing, trojan, spearphishing">
+                <small class="form-text text-muted">
+                    Enter multiple tags separated by commas (e.g., phishing, malware, fraud).
+                </small>
+            </div>
+
+
+            <!-- Dynamic Attribute Section -->
+            <div class="mb-3">
+            <h5>Add Attributes</h5><hr>
+
+            <div id="attribute-container">
+                <div class="attribute-row mb-3 d-flex align-items-center">
+                    <div class="row w-100">
+                        <!-- Category Dropdown -->
+                        <div class="col-md-4">
+                            <label>Category:</label>
+                            <select class="form-control category-select" name="attribute_category_0" onchange="updateAttributes(this, 0)">
+                                {% for category, attributes in misp_attributes.items() %}
+                                    <option value="{{ category }}">{{ category }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Attribute Type Dropdown -->
+                        <div class="col-md-4">
+                            <label>Attribute Type:</label>
+                            <select class="form-control attribute-type-select" name="attribute_type_0"></select>
+                        </div>
+
+                        <!-- Attribute Value Input -->
+                        <div class="col-md-3">
+                            <label>Value:</label>
+                            <input type="text" class="form-control" name="attribute_value_0" placeholder="Enter value">
+                        </div>
+
+                        <!-- Remove Attribute Button -->
+                        <div class="col-md-1 d-flex align-items-end">
+                            <button type="button" class="btn btn-danger btn-sm mt-3" onclick="removeAttribute(this)">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-secondary mt-2" onclick="addAttribute()">+ Add Another Attribute</button>
+
+
+            <!-- Spinner -->
+            {% include 'spinner.html' %}
+
+        </div>
+</div>
+        <!-- Submit Button -->
+        <div class="text-center">
+            <button type="submit" class="btn custom-btn mt-3">Submit Report</button>
+        </div>
+
+    </form>
+</div>
+
+<script>
+    var attributeData = {{ misp_attributes | tojson }};
+    var attributeIndex = 1;  // Track number of attributes added
+
+    function updateAttributes(categorySelect, index) {
+        var selectedCategory = categorySelect.value;
+        var attributeSelect = document.getElementsByName(`attribute_type_${index}`)[0];
+
+        if (!attributeSelect) return;
+
+        // Clear previous options
+        attributeSelect.innerHTML = "";
+
+        // Populate attribute dropdown based on category selection
+        if (attributeData[selectedCategory]) {
+            attributeData[selectedCategory].forEach(attr => {
+                var option = document.createElement("option");
+                option.value = attr;
+                option.textContent = attr;
+                attributeSelect.appendChild(option);
+            });
+        }
+    }
+
+    function addAttribute() {
+        var container = document.getElementById("attribute-container");
+
+        var newRow = document.createElement("div");
+        newRow.classList.add("attribute-row", "mb-3", "d-flex", "align-items-center");
+
+        newRow.innerHTML = `
+            <div class="row w-100">
+                <div class="col-md-4">
+                    <label>Category:</label>
+                    <select class="form-control category-select" name="attribute_category_${attributeIndex}" onchange="updateAttributes(this, ${attributeIndex})">
+                        {% for category in misp_attributes.keys() %}
+                            <option value="{{ category }}">{{ category }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label>Attribute Type:</label>
+                    <select class="form-control attribute-type-select" name="attribute_type_${attributeIndex}"></select>
+                </div>
+                <div class="col-md-3">
+                    <label>Value:</label>
+                    <input type="text" class="form-control" name="attribute_value_${attributeIndex}" placeholder="Enter value">
+                </div>
+                <div class="col-md-1 d-flex align-items-end">
+                    <button type="button" class="btn btn-danger btn-sm mt-3" onclick="removeAttribute(this)">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        container.appendChild(newRow);
+        updateAttributes(newRow.querySelector(".category-select"), attributeIndex);
+        attributeIndex++;
+    }
+
+    function removeAttribute(button) {
+        var row = button.closest(".attribute-row");
+        row.remove();
+    }
+</script>
+
+{% endblock %}

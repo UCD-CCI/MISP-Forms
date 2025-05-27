@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}MISP-FORMS{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2><i class="fas fa-shuffle"></i> Report XSS Attack</h2>
+    <p class="info-box">
+        Cross-Site Scripting (XSS) attacks occur when an attacker injects malicious scripts into trusted websites or applications,
+        targeting unsuspecting users. Social XSS involves leveraging social engineering tactics to trick victims into interacting
+        with malicious links or payloads. Such attacks can lead to data theft, account compromise, or other damaging consequences.
+        <br>
+
+    </p>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="flash-message {{ category }}">
+        {{ message|safe }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+    <form method="POST" action="{{ url_for('xss.xss') }}" onsubmit="showSpinner()" enctype="multipart/form-data">
+
+
+        <!-- organisation Selection -->
+        <h5>Organisation</h5>
+        <div class="mb-3 p-3 border rounded" style="border: 2px solid #178f8f;">
+            <label for="organisation" class="form-label">Select organisation (Required)</label>
+            <select class="form-control" name="organisation" id="organisation" required>
+                <option value="" disabled selected>Select an organisation</option>
+                {% for org in available_organisations %}
+                <option value="{{ org }}">{{ org }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+
+        <!-- Sharing Options -->
+<h5>Sharing Options</h5>
+
+
+        <div class="mb-3 p-3 border rounded" style="border: 2px solid #178f8f;">
+            {% include 'event_sharing_lite.html' %}
+        </div>
+
+
+        <!-- Incident Details -->
+        <h5>Incident Details {% with href="https://mkdocs.underserved.org" %} {% include 'help.html' %} {% endwith %}</h5>
+        <div class="mb-3 p-3 border rounded" style="border:2px solid #178f8f;">
+
+                 <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="date" class="form-label">Date of Attack: (Required)</label>
+                    <input type="date" class="form-control" name="date" id="date" value="{{ today_date }}" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="time" class="form-label">Time of Attack:</label>
+                    <input type="time" class="form-control" name="time" id="time" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="url">URL:</label>
+                <input type="url" class="form-control" name="url" id="url" placeholder="URL where the attack occurred" required>
+            </div>
+
+            <div class="form-group">
+                <label for="xss_payload">XSS Payload:  </label>
+                <textarea class="form-control" name="xss_payload" id="xss_payload" rows="4"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="attacker_ip">Attacker IP:</label>
+                <input type="text" class="form-control" name="attacker_ip" id="attacker_ip" pattern="(?:\d{1,3}\.){3}\d{1,3}"  inputmode="numeric"  placeholder="e.g. 192.168.1.1">
+            </div>
+
+            <div class="form-group">
+                <label for="victim_ip">Victim IP:</label>
+                <input type="text" class="form-control" name="victim_ip" id="victim_ip" pattern="(?:\d{1,3}\.){3}\d{1,3}"  inputmode="numeric"  placeholder="e.g. 192.168.1.1">
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description (Required):</label>
+                <textarea class="form-control" name="description" id="description" rows="4" placeholder="Provide a description of the incident." required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="threat_actor">Threat Actor:</label>
+                                <div class="input-group">
+                    <input type="text" class="form-control" id="threat_actor" name="threat_actor" placeholder="Enter Threat Actor name (optional)">
+                    <a href="https://attack.mitre.org/groups/" class="btn btn-outline-info" target="_blank" rel="noopener noreferrer">
+                        <img src="{{ url_for('static', filename='images/threat_actor.png') }}" alt="CVE" style="height: 22px; width: 22px; margin-right: 5px;"> Threat Actors
+                    </a>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="screenshot">Upload Screenshot:</label>
+                <input type="file" class="form-control" name="screenshot" id="screenshot" accept="image/*">
+            </div>
+
+            {% include 'spinner.html' %}
+
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn custom-btn">Submit Report</button>
+        </div>
+
+    </form>
+</div>
+
+{% endblock %}

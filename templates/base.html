@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MISP-FORMS{% endblock %}</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+
+</head>
+<body>
+<body>
+<!-- Ghosted full-screen background -->
+<div style="background: url('{{ url_for('static', filename='images/un_icon.png') }}') center center / 95% no-repeat fixed; opacity: 0.08; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;"></div>
+
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+<div class="top-bar">
+    <a href="/">
+        <img src="{{ url_for('static', filename='images/banner.png') }}" alt="Logo" style="width: 60px; height: 60px;">
+    </a>
+
+    <a href="https://underserved-project.eu/" target="_blank" rel="noopener noreferrer">
+        <img src="{{ url_for('static', filename='images/eu.png') }}" alt="Logo"
+             style="width: 180px; height: auto;">
+    </a>
+
+        <a href="/news">
+        <img src="{{ url_for('static', filename='images/news.png') }}" alt="NEWS FEED" style="width: 40px; height: 40px;">
+    </a>
+
+
+
+
+
+
+</div>
+
+
+<div class="banner-section d-flex align-items-center justify-content-center flex-wrap">
+    <a href="/">
+        <img src="{{ url_for('static', filename='images/banner.png') }}" alt="Banner" class="banner-img mr-4">
+    </a>
+    <div class="banner-text">
+        <h2 class="banner-tagline">A Simple Way to Report Cyber Security Incidents</h2>
+    </div>
+
+
+</div>
+
+<!-- Content Section -->
+<div class="content">
+    {% block content %}
+    {% endblock %}
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    © 2025 MISP-FORMS. UCD Centre for Cybersecurity & Cybercrime Investigation . All Rights Reserved.
+
+</div>
+</div>
+</body>
+</html>
