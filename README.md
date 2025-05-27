@@ -3,14 +3,14 @@
 
 ## MISP-Forms Overview
 
-**MISP-Forms** is a service designed to provide users with a set of intuitive web forms for reporting various types of cyberattacks. 
+**MISP-Forms** is a service designed to provide users with a set of intuitive web forms for reporting various types of cyber attack. 
 These forms ensure that all relevant data is accurately captured and structured in a way that makes it actionable for law enforcement 
 agencies, national authorities, and organisations such as CSIRTs (Computer Security Incident Response Teams). 
 
 
-
+<p align="center">
 <img src="static/images/mf-ui.png" alt="UN Icon" width="70%" style="float: center; margin-left: 10px;">  
-
+</p>
 ---
 
 ## Key Features
