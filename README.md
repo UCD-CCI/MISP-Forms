@@ -112,8 +112,14 @@ pip install -r requirements.txt
 gunicorn -w 4 -b 127.0.0.1:5000 app:app
 ```
 
-For Development you run Flask app instead of gunicorn
+For Production Environment run
 
+```bash
+gunicorn -w 4 -b 127.0.0.1:5000 app:app
+```
+
+
+For Development Environment run
 ```bash
 python3 app.py
 ```
