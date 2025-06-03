@@ -81,7 +81,7 @@ def phishing():
                     for chunk in iter(lambda: f.read(4096), b""):
                         sha256_hash.update(chunk)
                 attachment_sha256 = sha256_hash.hexdigest()
-                add_attribute(misp, event_id, category="Payload delivery", attr_type="attachment-sha256", value=attachment_sha256, comment="SHA256 of Email Attachment")
+                add_attribute(misp, event_id, category="Payload delivery", attr_type="sha256", value=attachment_sha256, comment="SHA256 of Email Attachment")
 
             flash(
                 '✅ Report submitted successfully - Thank you!',
