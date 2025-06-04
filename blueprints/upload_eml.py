@@ -60,7 +60,7 @@ def create_misp_event(filepath, api_key, organisation):
     import re
 
     def clean_subject(subject):
-        # MISP does not support emoji in info field, so stripping out these characters.
+        # MISP does not support emoji in the info field - function strips out these characters.
         emoji_pattern = re.compile(
             "[" 
             "\U0001F600-\U0001F64F"  # emoticons
@@ -111,7 +111,11 @@ def create_misp_event(filepath, api_key, organisation):
     email_object.add_attribute('from', value=parseaddr(msg.get('From', ''))[1], type='email-src')
     email_object.add_attribute('to', value=parseaddr(msg.get('To', ''))[1], type='email-dst')
     email_object.add_attribute('subject', value=decoded_subject_raw, type='text')
-    email_object.add_attribute('send-date', value=msg.get('Date', ''), type='datetime')
+    #email_object.add_attribute('send-date', value=msg.get('Date', ''), type='datetime')
+    # Clean the Date heaer to remove redundant timezones like "(+03)"
+    raw_date = msg.get('Date', '')
+    cleaned_date = re.sub(r'\s*\([^)]+\)', '', raw_date).strip()
+    email_object.add_attribute('send-date', value=cleaned_date, type='datetime')
 
     if msg.get('Message-ID'):
         email_object.add_attribute('message-id', value=msg['Message-ID'], type='text')
@@ -122,7 +126,7 @@ def create_misp_event(filepath, api_key, organisation):
     # Extract IP addresses from Received headers
     received_headers = msg.get_all("Received", [])
     for received in received_headers:
-        ip_matches = re.findall(r'\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b', received)  #review regex
+        ip_matches = re.findall(r'\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b', received)
         for ip in ip_matches:
             ip_attribute = MISPAttribute()
             ip_attribute.type = "ip-src"
