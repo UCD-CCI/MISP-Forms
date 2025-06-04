@@ -56,8 +56,24 @@ def upload_eml():
 
     return render_template('upload_eml.html', available_organisations=available_organisations)
 
-
 def create_misp_event(filepath, api_key, organisation):
+    import re
+
+    def clean_subject(subject):
+        # MISP does not support emoji in info field, so stripping out these characters.
+        emoji_pattern = re.compile(
+            "[" 
+            "\U0001F600-\U0001F64F"  # emoticons
+            "\U0001F300-\U0001F5FF"  # symbols & pictographs
+            "\U0001F680-\U0001F6FF"  # transport & map symbols
+            "\U0001F1E0-\U0001F1FF"  # flags
+            "\U00002700-\U000027BF"  # dingbats
+            "\U000024C2-\U0001F251"  # enclosed characters
+            "]+", flags=re.UNICODE
+        )
+        clean = emoji_pattern.sub('', subject)
+        return clean.encode('ascii', 'ignore').decode('ascii').strip()
+
     MISP_URL = os.getenv('MISP_URL')
     MISP_VERIFY_SSL = os.getenv('MISP_VERIFY_SSL', 'False').lower() == 'true'
     misp = ExpandedPyMISP(MISP_URL, api_key, MISP_VERIFY_SSL)
@@ -66,22 +82,27 @@ def create_misp_event(filepath, api_key, organisation):
         msg = email.message_from_file(eml_file)
 
     raw_subject = msg.get('Subject', '').strip()
-    decoded_subject = extract_decoded_header(raw_subject) if raw_subject else '(No Subject)'
+    decoded_subject_raw = extract_decoded_header(raw_subject) if raw_subject else '(No Subject)'
+    decoded_subject = clean_subject(decoded_subject_raw)
 
     misp_event = MISPEvent()
     misp_event.info = f"Phishing Email - {decoded_subject[:180]}"
-    misp_event.distribution = 0  # currently fixed, not changed by sharing option on form
+    misp_event.distribution = 0
     misp_event.threat_level_id = 4
     misp_event.analysis = 0
-    misp_event.add_tag('rsit:fraud="phishing"')
-    misp_event.add_tag('circl: incident - classification = "phishing"')
-    misp_event.add_tag('tlp:red')  # currently fixed, not changed by sharing option on form
-    misp_event.add_tag('source:UnderServed')
-    misp_event.add_tag('source:MISP-Forms')
-    misp_event.add_tag('misp-galaxy:mitre-attack-pattern="Phishing - T1660"') #phishing
-    misp_event.add_tag('misp-galaxy:mitre-attack-pattern="Phishing for Information - T1598"') #phishing
 
-
+    # Add Tags
+    tags = [
+        'rsit:fraud="phishing"',
+        'circl: incident - classification = "phishing"',
+        'tlp:red',
+        'source:UnderServed',
+        'source:MISP-Forms',
+        'misp-galaxy:mitre-attack-pattern="Phishing - T1660"',
+        'misp-galaxy:mitre-attack-pattern="Phishing for Information - T1598"'
+    ]
+    for tag in tags:
+        misp_event.add_tag(tag)
 
     event = misp.add_event(misp_event)
     event_id = event['Event']['id']
@@ -89,7 +110,7 @@ def create_misp_event(filepath, api_key, organisation):
     email_object = MISPObject('email')
     email_object.add_attribute('from', value=parseaddr(msg.get('From', ''))[1], type='email-src')
     email_object.add_attribute('to', value=parseaddr(msg.get('To', ''))[1], type='email-dst')
-    email_object.add_attribute('subject', value=decoded_subject, type='text')
+    email_object.add_attribute('subject', value=decoded_subject_raw, type='text')
     email_object.add_attribute('send-date', value=msg.get('Date', ''), type='datetime')
 
     if msg.get('Message-ID'):
@@ -98,13 +119,10 @@ def create_misp_event(filepath, api_key, organisation):
     if msg.get('Reply-To'):
         email_object.add_attribute('reply-to', value=parseaddr(msg['Reply-To'])[1], type='email-reply-to')
 
-
-##  Parse eml for IoC and additional info
-
     # Extract IP addresses from Received headers
     received_headers = msg.get_all("Received", [])
     for received in received_headers:
-        ip_matches = re.findall(r'\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b', received)
+        ip_matches = re.findall(r'\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b', received)  #review regex
         for ip in ip_matches:
             ip_attribute = MISPAttribute()
             ip_attribute.type = "ip-src"
